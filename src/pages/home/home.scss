@@ -1,3 +1,44 @@
 page-home {
+    .country_button{
+        width: 90%;
+        border:1px solid #488aff
+    }
+
+    .country_button_selected{
+        width: 90%;
+        background: #488aff;
+        border:1px solid #488aff;
+        color:#FFFFFF;
+    }
+
+    .radio_list{
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        border-top:1px solid #999;
+        padding-bottom: 5px;
+    }
+
+    .item-block{
+        width:auto;
+        margin-left: 40px;
+        width:180px;
+    }
+
+    .item-block-title{
+        width:180px;
+    }
+
+    .secondary_attributes{
+        border-top:1px solid #999;
+        display: flex;
+        flex-direction: row;
+        padding-top:10px;
+    }
+    .state_attributes{
+        height: 300px;
+        width:400px;
+    }
+
 
 }

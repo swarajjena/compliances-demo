@@ -1,17 +1,167 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
+  <ion-navbar color="primary">
+    <ion-title text-center color="primary"> COMPLIANCE DATABASE</ion-title>
+    <ion-buttons end> 
+        <button ion-button > ADMIN PANEL </button> 
+        <button ion-button (click)="logout()"> LOGOUT </button> 
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+    <ion-card>
+
+        <ion-card-header color="primary" clear>
+            <div style="display:flex;flex-direction:row">
+                <ion-label  (click)="closeSelectedCountries()">Select applicable countries</ion-label>         
+                <ion-buttons end> 
+                    <button ion-button (click)="applySelectedCountries()" clear *ngIf="active_tab=='selected_countries'">
+                    APPLY &nbsp;  
+                    <ion-icon name="return-left"></ion-icon>
+                </button>            
+                <button ion-button  (click)="closeSelectedCountries()" clear *ngIf="active_tab!='selected_countries'">
+                    <ion-icon name="ios-arrow-dropdown" style="font-size:30px"></ion-icon>
+                </button>            
+                </ion-buttons>
+            </div>
+        </ion-card-header>
+      
+        <ion-card-content *ngIf="active_tab=='selected_countries'">
+          <!-- Add card content here! -->
+          <div style="display:flex;flex-direction:row">
+              <ion-list col-3>
+                    <button ion-button clear  *ngFor="let country of db.countries.slice(0,8)" 
+                    (click)="selectCountry(country.name)" 
+                    [ngClass]="{'country_button' : selected_countries.indexOf(country.name)<0,
+                              'country_button_selected':selected_countries.indexOf(country.name)>=0}">
+                            {{country.name}}
+                    </button>
+              </ion-list>
+
+              <ion-list col-3>
+                    <button ion-button clear  *ngFor="let country of db.countries.slice(8,16)" 
+                    (click)="selectCountry(country.name)" 
+                    [ngClass]="{'country_button' : selected_countries.indexOf(country.name)<0,
+                              'country_button_selected':selected_countries.indexOf(country.name)>=0}">
+                            {{country.name}}
+                    </button>
+              </ion-list>
+
+
+              <ion-list col-3>
+                  <button ion-button clear  *ngFor="let country of db.countries.slice(16,24)" 
+                  (click)="selectCountry(country.name)" 
+                  [ngClass]="{'country_button' : selected_countries.indexOf(country.name)<0,
+                            'country_button_selected':selected_countries.indexOf(country.name)>=0}">
+                          {{country.name}}
+                  </button>
+              </ion-list>
+
+              <ion-list col-3>
+                  <button ion-button clear  *ngFor="let country of db.countries.slice(24,32)" 
+                  (click)="selectCountry(country.name)" 
+                  [ngClass]="{'country_button' : selected_countries.indexOf(country.name)<0,
+                            'country_button_selected':selected_countries.indexOf(country.name)>=0}">
+                          {{country.name}}
+                  </button>
+              </ion-list>
+          </div>
+      </ion-card-content>
+      
+    </ion-card>  
+
+    <div>
+        <ion-card *ngFor="let c of db.final_selected_countries">
+            <ion-card-header color="primary" clear>
+                <div style="display:flex;flex-direction:row">
+                <ion-label  (click)="makeActive(c)">{{c | uppercase}}</ion-label>         
+                <ion-buttons end> 
+                    <button ion-button (click)="saveAttributes(c)" clear *ngIf="active_tab==c">
+                    APPLY &nbsp;  
+                    <ion-icon name="return-left"></ion-icon>
+                </button>            
+                <button ion-button  (click)="makeActive(c)" clear *ngIf="active_tab!=c">
+                    <ion-icon name="ios-arrow-dropdown" style="font-size:30px"></ion-icon>
+                </button>            
+                </ion-buttons>
+
+                </div>
+            </ion-card-header>
+    
+
+          
+            <ion-card-content *ngIf="active_tab==c">
+              <!-- Add card content here! -->
+
+              <ion-list radio-group class="radio_list"  *ngFor="let attribute of main_attributes" [(ngModel)]="attributes_current[attribute.id]">
+                  <ion-item class="item-block-title">
+                      {{attribute.title}}
+                  </ion-item>
+                  <ion-item *ngFor="let opt of attribute.options">
+                      <ion-radio value="{{opt.id}}" item-left ></ion-radio>
+                      <ion-label>{{opt.title}}</ion-label>
+                  </ion-item>
+              </ion-list>
+
+              <div class="secondary_attributes" *ngIf="active_tab=='India'" >
+
+                  <ion-list >
+                      <ion-list-header style="border-top:none">
+                        States
+                      </ion-list-header>
+                      <ion-scroll  scrollY="true"  class="state_attributes">
+  
+                          <ion-item *ngFor="let state of states" full style="width:100%">
+                            <ion-label text-wrap>{{state.title}}</ion-label>
+                            <ion-checkbox [(ngModel)]="attributes_current['states'][state.id]" (ionChange)="activateState(state.id)"></ion-checkbox>
+                          </ion-item>
+
+                      </ion-scroll>
+
+                  </ion-list>
+                  <ion-card>
+                    <ion-card-header>
+                        State specific sttributes
+                    </ion-card-header>
+                      <ion-card-content>
+                          <ion-item *ngFor="let state_attr of states_specific_attributes" full style="width:100%">
+                              <ion-label text-wrap>{{state_attr.title}}</ion-label>
+                              <ion-checkbox [(ngModel)]="attributes_current['states'][active_state+state_attr.id]"></ion-checkbox>
+                          </ion-item>
+  
+                      </ion-card-content>
+                  </ion-card>
+                </div>
+
+            </ion-card-content>
+          
+          </ion-card>      
+    </div>
+    <div style="display:flex;flex-direction:column;align-content: center;">
+        <button ion-button text-center *ngIf="db.final_selected_countries.length>0" (click)="show_compliances_list=true" style="width:300px">Generate Compliance List</button>
+
+        <ion-list *ngIf="show_compliances_list">
+            <ion-list-header>
+                List of compliances
+            </ion-list-header>
+                <ion-item>
+                    Compliance 1 
+                </ion-item>
+
+                <ion-item>
+                    Compliance 2
+                </ion-item>
+
+                <ion-item>
+                    Compliance 3 
+                </ion-item>
+
+                <ion-item>
+                    Compliance 4 
+                </ion-item>
+
+          </ion-list>
+    </div>
+
+
 </ion-content>
