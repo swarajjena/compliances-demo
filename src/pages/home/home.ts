@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { LoginPage } from '../login/login';
 import { DatabaseProvider } from '../../providers/database/database';
+import { AdminPanelPage } from '../admin-panel/admin-panel';
 
 @Component({
   selector: 'page-home',
@@ -32,11 +33,6 @@ export class HomePage {
 
   }
 
-  logout(){
-    this.storage.set("user",null).then(()=>{
-          this.navCtrl.setRoot(LoginPage);
-    })
-  }
 
   selectCountry(country){
     if(this.selected_countries.indexOf(country)<0)
@@ -90,6 +86,10 @@ export class HomePage {
   activateState(state){
     this.active_state=state;
     console.log(this.attributes_current)
+  }
+
+  goToAdminPage(){
+    this.navCtrl.push(AdminPanelPage)
   }
 
 }

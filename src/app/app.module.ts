@@ -14,6 +14,7 @@ import { LoginPage } from '../pages/login/login';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { DatabaseProvider } from '../providers/database/database';
+import { AdminPanelPage } from '../pages/admin-panel/admin-panel';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { DatabaseProvider } from '../providers/database/database';
     ContactPage,
     HomePage,
     TabsPage,
-    LoginPage
+    LoginPage,
+    AdminPanelPage
   ],
   imports: [
     BrowserModule,
@@ -37,7 +39,8 @@ import { DatabaseProvider } from '../providers/database/database';
     ContactPage,
     HomePage,
     TabsPage,
-    LoginPage
+    LoginPage,
+    AdminPanelPage
   ],
   providers: [
     StatusBar,
